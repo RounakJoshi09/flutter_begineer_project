@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import './question.dart';
 import './answer.dart';
+import 'Quiz.dart';
+import 'result.dart';
 
 void main() {
   runApp(
@@ -19,24 +21,43 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   var questionIndex = 0;
+  var totalScore = 0;
   //This is a Map used to store key value Pair
   var question = [
     //This is actually list of maps.
     {
       //Key                 //Value
       'question': 'What\'s your Favourite Colour?',
-      'answer': ['Blue', 'Red', 'Green', 'Violet'],
+      'answer': [
+        {'text': 'Blue', 'score': 2},
+        {'text': 'Red', 'score': 5},
+        {'text': 'Green', 'score': 3},
+        {'text': 'Violet', 'score': 4}
+      ],
     },
     {
       'question': 'What\'s your Favourite Animal?',
-      'answer': ['ButterFly', 'Bull', 'Panda', 'Horse']
+      'answer': [
+        {'text': 'Horse', 'score': 2},
+        {'text': 'Lion', 'score': 5},
+        {'text': 'Snake', 'score': 3},
+        {'text': 'Eagle', 'score': 4}
+      ]
     }
   ];
-  void answerQuestion() {
+  void reset() {
     setState(() {
+      questionIndex = 0;
+      totalScore = 0;
+    });
+  }
+
+  void answerQuestion(int score) {
+    setState(() {
+      totalScore += score;
       //Here it is setting a state with new variable.i.e It is justr calling Widget build again of the widget of which it called,and rendering all the information.However
       //Flutter internal mechanism only renders what is changed in the widget not the whole widget.
-      questionIndex = (questionIndex + 1) % 2;
+      questionIndex = (questionIndex + 1);
     });
 
     print('Question Answered!');
@@ -45,24 +66,15 @@ class MyAppState extends State<MyApp> {
   @override //It is used to just specify that we are overriding an already existing function deliberately.MyApp
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        // Scaffold is used to create a basic page of APP
-        appBar: AppBar(
-          title: Text('My App'),
-          shadowColor: Color.fromARGB(0, 17, 78,
-              245), // Here AppBar is a widget which takes title as aText widget.
-        ),
-        body: Column(children: [
-          Question(question[questionIndex]['question']
-              .toString()), // Here when the input value in the stateless widget changes,because build methid in the main ran again then
-          //flutter rebuild that widget.In case of statefull it is rerendered.So the stateless widget rebuild not because of internal state but because of input data.
-          // here ... is used because here we are creating nesteed list,list under childeren ,therefore ... inject items of the list to the outer list making it unnested lists
-          ...(question[questionIndex]['answer'] as List<String>).map((e) {
-            //here it is mapping each value in answer list to the function through anonymus functions.
-            return Answer(answerQuestion, e);
-          }).toList()
-        ]),
-      ),
-    );
+        home: Scaffold(
+            // Scaffold is used to create a basic page of APP
+            appBar: AppBar(
+              title: Text('My App'),
+              shadowColor: Color.fromARGB(0, 17, 78,
+                  245), // Here AppBar is a widget which takes title as aText widget.
+            ),
+            body: questionIndex < question.length
+                ? Quizz(question, answerQuestion, questionIndex)
+                : Result(totalScore, reset)));
   }
 }
