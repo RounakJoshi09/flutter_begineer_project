@@ -19,7 +19,19 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   var questionIndex = 0;
-  var question = ['What is your Name', 'What is your Email'];
+  //This is a Map used to store key value Pair
+  var question = [
+    //This is actually list of maps.
+    {
+      //Key                 //Value
+      'question': 'What\'s your Favourite Colour?',
+      'answer': ['Blue', 'Red', 'Green', 'Violet'],
+    },
+    {
+      'question': 'What\'s your Favourite Animal?',
+      'answer': ['ButterFly', 'Bull', 'Panda', 'Horse']
+    }
+  ];
   void answerQuestion() {
     setState(() {
       //Here it is setting a state with new variable.i.e It is justr calling Widget build again of the widget of which it called,and rendering all the information.However
@@ -41,13 +53,14 @@ class MyAppState extends State<MyApp> {
               245), // Here AppBar is a widget which takes title as aText widget.
         ),
         body: Column(children: [
-          Question(question[
-              questionIndex]), // Here when the input value in the stateless widget changes,because build methid in the main ran again then
+          Question(question[questionIndex]['question']
+              .toString()), // Here when the input value in the stateless widget changes,because build methid in the main ran again then
           //flutter rebuild that widget.In case of statefull it is rerendered.So the stateless widget rebuild not because of internal state but because of input data.
-          answer(answerQuestion),
-          answer(answerQuestion),
-          answer(answerQuestion),
-          answer(answerQuestion),
+          // here ... is used because here we are creating nesteed list,list under childeren ,therefore ... inject items of the list to the outer list making it unnested lists
+          ...(question[questionIndex]['answer'] as List<String>).map((e) {
+            //here it is mapping each value in answer list to the function through anonymus functions.
+            return Answer(answerQuestion, e);
+          }).toList()
         ]),
       ),
     );

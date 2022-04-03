@@ -1,0 +1,18 @@
+The differenec between final and const is:-
+1.Finalkey is runtime constance ,like you can variable with final keyword anywhere in code and may
+ change also but once it is chaned then it will not be changed in runtime like after compliation
+For example.
+final i=0;//allowed
+i=j; //allowed
+i++//Not alowed beacuse after compilation after runtime its value is changing.
+2.const keyword is compile time constant ,that means that if you set once variable const. then you cannot change it 
+anywhere in the code.
+Now there are two type of const ,beacause undrstanding that ,we have to learn one more thing.
+1.a variable doesnot store any object but stores the address of object .
+i.e int x=5;
+it stores the adddress of 5,which is in memory.
+So ,
+if const i=5;
+then we cannot change value of i anywhere in the code;
+but if list=const [a,b,c];
+then we cannot append anything into the list, like like.append(8) //we cannot do it that.
